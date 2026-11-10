@@ -1,0 +1,24 @@
+server:
+  port: 8080
+
+site:
+  url: https://ziwenye.github.io
+  description: ZiwenYe 的个人博客 — 探索技术、Agent开发与生活杂谈
+  favicon: /static/imgs/avatar.png
+
+home:
+  title: RainHush
+  subtitle: 静心书写 · 探索技术与生活
+  avatar: /static/imgs/avatar.png
+  owner: ZiwenYe
+
+reading:
+  words_per_minute: 300
+
+extensions:
+  image-layout: true
+  better-friends: true
+
+deploy:
+  mode: git
+  branch: gh-pages

@@ -1,0 +1,43 @@
+{{define "content"}}
+<div class="container post-container">
+<div class="post-main">
+<article class="post">
+    <h1 class="post-title">{{.Title}}</h1>
+
+    {{template "c/post-meta" .}}
+
+    {{if .Cover}}<img class="post-cover" src="{{.Cover}}" alt="{{.Title}}" loading="lazy" decoding="async">{{end}}
+
+    <div class="post-body">
+        {{.Content}}
+    </div>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "{{.Title}}",
+        "datePublished": "{{.Date}}",
+        "dateModified": "{{if .UpdatedAt}}{{.UpdatedAt}}{{else}}{{.Date}}{{end}}",
+        "author": {
+            "@type": "Person",
+            "name": "{{if .Author}}{{.Author}}{{else if .Home.Owner}}{{.Home.Owner}}{{else}}ZiwenYe{{end}}"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "{{.SiteName}}"
+        },
+        "mainEntityOfPage": "{{.CanonicalURL}}"
+    }
+    </script>
+
+    {{/* The licence. A hatched strip, like every other texture band on
+         the sheet — it closes the article with the page's own material
+         rather than with a floating line of small print. Component:
+         c/post-license. */}}
+    {{template "c/post-license" .}}
+</article>
+</div>
+{{template "c/post-toc" .}}
+</div>
+{{end}}

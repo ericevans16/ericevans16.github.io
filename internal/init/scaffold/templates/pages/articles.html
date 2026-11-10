@@ -1,0 +1,24 @@
+{{define "content"}}
+<div class="container">
+<div class="articles-header">
+    <h1>{{.Title}}</h1>
+</div>
+{{if .Posts}}
+{{range .Posts}}
+<article class="post-list-item">
+    <a href="/articles/{{.Filename}}/">{{.Title}}</a>
+    {{if .Date}}<time datetime="{{.Date}}">{{.Date}}</time>{{end}}
+</article>
+{{end}}
+<nav class="pagination" aria-label="Pagination">
+    {{if .HasPrev}}<a href="{{.PrevURL}}">上一页</a>{{else}}<span class="page-disabled">上一页</span>{{end}}
+    {{range .PageItems}}
+    {{if .Current}}<span class="page-current">{{.Number}}</span>{{else}}<a href="{{.URL}}">{{.Number}}</a>{{end}}
+    {{end}}
+    {{if .HasNext}}<a href="{{.NextURL}}">下一页</a>{{else}}<span class="page-disabled">下一页</span>{{end}}
+</nav>
+{{else}}
+<p>No articles yet.</p>
+{{end}}
+</div>
+{{end}}

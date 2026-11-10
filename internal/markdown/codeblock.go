@@ -1,0 +1,147 @@
+package markdown
+
+import (
+	"bytes"
+	stdhtml "html"
+	"strings"
+
+	"rainhush/internal/icons"
+	"rainhush/pkg/extension"
+
+	_ "rainhush/internal/markdown/components/imagelayout"
+
+	"github.com/alecthomas/chroma/v2"
+	chromahtml "github.com/alecthomas/chroma/v2/formatters/html"
+	"github.com/alecthomas/chroma/v2/lexers"
+	"github.com/alecthomas/chroma/v2/styles"
+	"github.com/yuin/goldmark"
+	"github.com/yuin/goldmark/ast"
+	"github.com/yuin/goldmark/renderer"
+	"github.com/yuin/goldmark/util"
+)
+
+// Extension 是 rainhush 的 goldmark 扩展：注册代码块渲染器（Chroma 高亮 /
+// Mermaid / 组件与插件围栏）与图片渲染器（尺寸注入 + 懒加载）。
+type Extension struct{}
+
+// Ext 是注册到 goldmark 的扩展实例。
+var Ext = &Extension{}
+
+func (e *Extension) Extend(m goldmark.Markdown) {
+	m.Renderer().AddOptions(renderer.WithNodeRenderers(
+		util.Prioritized(&codeBlockRenderer{}, 0),
+		util.Prioritized(&imageRenderer{}, 0),
+		util.Prioritized(&paragraphRenderer{}, 0),
+	))
+}
+
+type codeBlockRenderer struct{}
+
+func (r *codeBlockRenderer) RegisterFuncs(reg renderer.NodeRendererFuncRegisterer) {
+	reg.Register(ast.KindFencedCodeBlock, r.renderFencedCodeBlock)
+}
+
+func (r *codeBlockRenderer) renderFencedCodeBlock(w util.BufWriter, source []byte, node ast.Node, entering bool) (ast.WalkStatus, error) {
+	n := node.(*ast.FencedCodeBlock)
+	if !entering {
+		return ast.WalkContinue, nil
+	}
+
+	lang := string(n.Language(source))
+
+	if lang == "mermaid" {
+		w.WriteString(`<pre class="mermaid">`)
+		lines := n.Lines()
+		for i := 0; i < lines.Len(); i++ {
+			line := lines.At(i)
+			w.WriteString(stdhtml.EscapeString(string(line.Value(source))))
+		}
+		w.WriteString(`</pre>`)
+		return ast.WalkSkipChildren, nil
+	}
+
+	var rawCode []byte
+	lines := n.Lines()
+	for i := 0; i < lines.Len(); i++ {
+		line := lines.At(i)
+		v := line.Value(source)
+		if i == 0 {
+			v = bytes.TrimLeft(v, "\n\r\t ")
+		}
+		rawCode = append(rawCode, v...)
+	}
+
+	rawCodeStr := strings.TrimLeft(string(rawCode), "\n\r\t ")
+
+	doc := Document()
+	if out, ok := extension.Default.RenderFence(lang, rawCodeStr, extension.Context{Document: doc}); ok {
+		w.WriteString(out)
+		return ast.WalkSkipChildren, nil
+	}
+
+	w.WriteString(`<div class="code-block">`)
+	w.WriteString(`<div class="code-block-header">`)
+	w.WriteString(`<div class="code-block-header-left">`)
+	w.WriteString(`<span class="code-block-lang">`)
+	if lang != "" {
+		w.WriteString(stdhtml.EscapeString(lang))
+	} else {
+		w.WriteString(`code`)
+	}
+	w.WriteString(`</span>`)
+	w.WriteString(`</div>`)
+	w.WriteString(`<div class="code-block-header-right">`)
+	// The copy button is wrapped in the rain-code-copy custom element,
+	// which owns the copy behavior (static/js/components/rain-code-copy.js).
+	// The inline onclick stays for scaffold sites that still ship the
+	// legacy global copyCode(); the element defers to it when present.
+	w.WriteString(`<rain-code-copy><button class="copy-btn" type="button" onclick="copyCode(this)" aria-label="Copy code" title="Copy code">`)
+	if copyIcon, err := icons.Func()("copy", "copy-icon"); err == nil {
+		w.WriteString(string(copyIcon))
+	}
+	w.WriteString(`<span class="copy-text">Copy</span>`)
+	w.WriteString(`</button></rain-code-copy>`)
+	w.WriteString(`</div>`)
+	w.WriteString(`</div>`)
+	w.WriteString(`<pre><code`)
+
+	if lang != "" {
+		escapedLang := stdhtml.EscapeString(lang)
+		w.WriteString(` class="language-` + escapedLang + `"`)
+
+		lexer := lexers.Get(lang)
+		if lexer == nil {
+			lexer = lexers.Analyse(rawCodeStr)
+		}
+		if lexer == nil {
+			lexer = lexers.Fallback
+		}
+		lexer = chroma.Coalesce(lexer)
+
+		style := styles.Get("monokai")
+		if style == nil {
+			style = styles.Fallback
+		}
+
+		formatter := chromahtml.New(chromahtml.WithClasses(true), chromahtml.TabWidth(4), chromahtml.PreventSurroundingPre(true))
+		iterator, err := lexer.Tokenise(nil, rawCodeStr)
+		if err == nil {
+			var buf bytes.Buffer
+			if err := formatter.Format(&buf, style, iterator); err == nil {
+				w.WriteString(`>`)
+				highlighted := strings.TrimSpace(buf.String())
+				w.WriteString(highlighted)
+				w.WriteString(`</code></pre>`)
+				w.WriteString(`</div>`)
+				return ast.WalkSkipChildren, nil
+			}
+		}
+	}
+
+	w.WriteString(`>`)
+	w.WriteString(stdhtml.EscapeString(strings.TrimRight(rawCodeStr, "\n")))
+	w.WriteString(`</code></pre>`)
+	w.WriteString(`</div>`)
+
+	return ast.WalkSkipChildren, nil
+}

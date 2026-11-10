@@ -1,0 +1,37 @@
+{{define "header"}}
+<header class="header">
+    <div class="header-inner">
+        <div class="header-brand">
+            {{/* The sheet signs itself in the handwritten voice, so the
+                 brand is the Latin name, not the Chinese site title —
+                 the brush subset carries no Latin, and the thin system
+                 cursive this falls through to is the voice the rest of
+                 the sheet already speaks. .SiteName stays Chinese for
+                 <title> and the SEO metadata. */}}
+            <a href="/">RainHush</a>
+        </div>
+        <nav class="header-nav" id="site-nav" aria-label="Main navigation">
+            <a href="/index.html" class="{{index .Nav "Home"}}">Home</a>
+            <a href="/articles.html" class="{{index .Nav "Articles"}}">Articles</a>
+            <a href="/friends.html" class="{{index .Nav "Friends"}}">Friends</a>
+            <a href="/about.html" class="{{index .Nav "About"}}">About</a>
+        </nav>
+        <div class="header-nav-actions">
+            {{template "c/theme-toggle" .}}
+            {{template "c/rain-toggle" .}}
+        </div>
+        <button
+            class="header-menu-btn"
+            onclick="toggleMenu()"
+            aria-label="Open navigation"
+            aria-controls="site-nav"
+            aria-expanded="false"
+            type="button"
+        >
+            <span class="menu-bar"></span>
+            <span class="menu-bar"></span>
+            <span class="menu-bar"></span>
+        </button>
+    </div>
+</header>
+{{end}}

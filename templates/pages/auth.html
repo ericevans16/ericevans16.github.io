@@ -1,0 +1,24 @@
+{{define "content"}}
+<div class="container">
+    <div class="auth-hero">
+        <h2 class="auth-title">Private access</h2>
+        <p class="auth-desc">This area is open to invited guests only. Enter the passphrase to continue.</p>
+        <form class="auth-form" id="deep-auth-form">
+            <label class="auth-label" for="deep-auth-input">Passphrase</label>
+            <input
+                class="auth-input"
+                id="deep-auth-input"
+                type="password"
+                inputmode="numeric"
+                autocomplete="current-password"
+                placeholder="Passphrase"
+                required
+                maxlength="32"
+            />
+            <button class="auth-submit" type="submit">Verify</button>
+        </form>
+        <p class="auth-error" id="deep-auth-error" hidden>Incorrect passphrase</p>
+        <div class="auth-divider"></div>
+    </div>
+</div>
+{{end}}

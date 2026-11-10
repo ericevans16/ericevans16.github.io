@@ -1,0 +1,47 @@
+{{define "content"}}
+<div class="container post-container">
+<div class="post-main">
+<article class="post">
+    <h1>{{.Title}}</h1>
+    <div class="post-meta-top">
+        {{if .Avatar}}<img class="post-author-avatar" src="{{.Avatar}}" alt="{{.Author}}" loading="lazy">{{end}}
+        <div class="post-meta-row">
+            {{if .Author}}<span class="post-author">{{.Author}}</span>{{end}}
+            {{if .Date}}{{if .Author}}<span class="post-meta-sep">·</span>{{end}}<time class="post-date" datetime="{{.Date}}">Published on {{.Date}}</time>{{end}}
+            {{if .UpdatedAt}}{{if or .Author .Date}}<span class="post-meta-sep">·</span>{{end}}<span class="post-updated">Updated at {{.UpdatedAt}}</span>{{end}}
+            {{if .Location}}{{if or .Author .Date .UpdatedAt}}<span class="post-meta-sep">·</span>{{end}}<span class="post-location">{{.Location}}</span>{{end}}
+        </div>
+    </div>
+    {{if .Cover}}<img class="post-cover" src="{{.Cover}}" alt="{{.Title}}" loading="lazy" decoding="async">{{end}}
+    <div class="post-body">
+        {{.Content}}
+    </div>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "{{.Title}}",
+        "datePublished": "{{.Date}}",
+        "dateModified": "{{if .UpdatedAt}}{{.UpdatedAt}}{{else}}{{.Date}}{{end}}",
+        "author": {
+            "@type": "Person",
+            "name": "{{if .Author}}{{.Author}}{{else}}Hypokinoko{{end}}"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "{{.SiteName}}"
+        },
+        "mainEntityOfPage": "{{.CanonicalURL}}"
+    }
+    </script>
+    <div class="post-license">
+        <p class="post-license-text">
+            本文采用知识共享署名-非商业性使用 4.0 国际许可协议，简称 <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC 4.0</a> 授权。<br />
+            欢迎转载与分享，转载时请保留作者署名、注明原文出处并附上原文链接。
+        </p>
+    </div>
+</article>
+</div>
+<aside class="post-toc" id="post-toc"></aside>
+</div>
+{{end}}
