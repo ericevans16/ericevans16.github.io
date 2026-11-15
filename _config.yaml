@@ -2,7 +2,7 @@ server:
   port: 8080
 
 site:
-  url: https://ziwenye.github.io
+  url: https://ericevans16.github.io
   description: ZiwenYe 的个人博客 — 探索技术、Agent开发与生活杂谈
   favicon: /static/imgs/avatar.png
 

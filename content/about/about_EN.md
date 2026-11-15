@@ -22,5 +22,5 @@ Articles are organized across four tracks:
 - **Life**: Personal reflections, hobbies, and book reviews.
 
 ### 📫 Connect
-- **GitHub**: [github.com/ZiwenYe](https://github.com/ZiwenYe)
+- **GitHub**: [github.com/ericevans16](https://github.com/ericevans16)
 - **RSS**: [Subscribe via RSS](/feed.xml)

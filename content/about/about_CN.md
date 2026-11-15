@@ -22,6 +22,6 @@ title: "About"
 - **Life（生活随笔）**：生活杂感、读书随笔与思考。
 
 ### 📫 保持联系
-- **GitHub**: [github.com/ZiwenYe](https://github.com/ZiwenYe)
+- **GitHub**: [github.com/ericevans16](https://github.com/ericevans16)
 - **RSS**: [订阅本站 RSS](/feed.xml)
 - **Email**: 欢迎通过 GitHub 联系与交流
