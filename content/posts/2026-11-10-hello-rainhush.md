@@ -6,6 +6,7 @@ updated_at: "2026-11-10"
 location: "Hangzhou"
 avatar: "/static/imgs/avatar.png"
 category: "Tech"
+tags: ["Go", "Static Site", "Blueprint"]
 ---
 
 今天，我的个人独立博客站点正式上线了！

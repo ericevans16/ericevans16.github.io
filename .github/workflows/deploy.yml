@@ -19,22 +19,22 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Source
+      - name: Checkout Blog Content
         uses: actions/checkout@v4
 
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version-file: go.mod
+          go-version: "1.24.x"
           cache: true
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      - name: Build Blog Site
+      - name: Install sitemaker & Build Site
         run: |
-          go build -o rainhush .
-          ./rainhush build
+          go install github.com/ericevans16/sitemaker@v0.1.2
+          "$(go env GOPATH)/bin/sitemaker" build
 
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3

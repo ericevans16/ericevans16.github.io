@@ -6,6 +6,7 @@ updated_at: "2026-11-07"
 location: "Hangzhou"
 avatar: "/static/imgs/avatar.png"
 category: "Trivia"
+tags: ["PKM", "Writing"]
 ---
 
 在互联网信息爆炸的时代，我们每天都会收藏无数篇优质文章、GitHub 仓库与技术文档。然而，久而久之我们容易陷入“收藏从未停止，行动从未开始”的知识黑洞。

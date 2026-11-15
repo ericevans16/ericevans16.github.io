@@ -6,6 +6,7 @@ updated_at: "2026-11-09"
 location: "Hangzhou"
 avatar: "/static/imgs/avatar.png"
 category: "Tech"
+tags: ["AI Agent", "LLM", "Python"]
 ---
 
 在接触复杂的 AI Agent 框架（如 LangChain、AutoGPT、CrewAI）之前，很多初学者常常被框架中层层嵌套的抽象类和复杂回调绕晕。其实，Agent 的核心本质并不神秘，甚至只需要几十行核心代码即可跑起一个极简的 ReAct 循环。

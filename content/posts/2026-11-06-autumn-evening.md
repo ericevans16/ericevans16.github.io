@@ -6,6 +6,7 @@ updated_at: "2026-11-06"
 location: "Hangzhou"
 avatar: "/static/imgs/avatar.png"
 category: "Life"
+tags: ["Essay", "Writing"]
 ---
 
 窗外淅淅沥沥下着秋雨，雨滴敲打在玻璃窗上，发出沉闷而有节奏的声响。屋里泡着一杯温热的乌龙茶，桌面上只留下一盏暖黄色的台灯。

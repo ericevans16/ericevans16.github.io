@@ -6,6 +6,7 @@ updated_at: "2026-11-08"
 location: "Hangzhou"
 avatar: "/static/imgs/avatar.png"
 category: "Lite Tech"
+tags: ["LLM", "Distillation"]
 ---
 
 在 AI 开源社区中，“模型蒸馏”（Model Distillation）近年来成为了一个高频出现的关键词。比如很多只有 7B 或 14B 参数的小型开源模型，在经过特异性蒸馏后，推理表现甚至能媲美上百亿甚至数千亿参数的超大基础模型。
